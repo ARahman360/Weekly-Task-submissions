@@ -1,1 +1,249 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flexbox Layout Exercise</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    /* MENU */
+    .menu {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background-color: #263238;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      padding: 16px 22px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      background-color: #111;
+    }
+
+    .menu a.active {
+      background-color: #00897b;
+    }
+
+    header {
+      text-align: center;
+      padding: 55px 20px;
+      background-color: #e0f2f1;
+    }
+
+    header h1 {
+      margin-bottom: 10px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    /* FLEXBOX CONTENT */
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .card {
+      flex: 1 1 280px;
+      max-width: 340px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    .card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 18px;
+    }
+
+    .info-box {
+      background: white;
+      margin-top: 25px;
+      padding: 22px;
+      border-left: 5px solid #00897b;
+      border-radius: 6px;
+    }
+
+    code {
+      background: #eef2f3;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 35px;
+      padding: 20px;
+      text-align: center;
+      background-color: #263238;
+      color: white;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 600px) {
+      .menu {
+        flex-direction: column;
+      }
+
+      .menu a {
+        width: 100%;
+        border-bottom: 1px solid #455a64;
+      }
+
+      header {
+        padding: 35px 15px;
+      }
+
+      .flex-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="menu">
+    <a class="active" href="#home">🏠 Home</a>
+    <a href="#flexbox">📦 Flexbox</a>
+    <a href="#settings">⚙️ Settings</a>
+    <a href="#responsive">📱 Responsive</a>
+    <a href="#features">✅ Features</a>
+  </nav>
+
+  <header id="home">
+    <h1>CSS Flexbox Layout</h1>
+    <p>This page demonstrates a responsive menu and content layout using CSS Flexbox.</p>
+  </header>
+
+  <main class="container">
+
+    <section id="flexbox">
+      <h2>How the content is laid out</h2>
+      <p>
+        The cards below are direct children of a Flexbox container.
+        The property <code>display: flex;</code> makes the container a Flexbox.
+        The cards are placed next to each other when there is enough screen space.
+      </p>
+
+      <div class="flex-container">
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80"
+               alt="Laptop with programming code">
+          <div class="card-content">
+            <h3>Flex Container</h3>
+            <p>
+              The parent element uses <code>display: flex</code>.
+              Its direct child elements automatically become flex items.
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
+               alt="People working with computers">
+          <div class="card-content">
+            <h3>Flexible Items</h3>
+            <p>
+              <code>flex: 1 1 280px</code> lets the cards grow, shrink and use
+              about 280 pixels as their preferred starting width.
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=800&q=80"
+               alt="Responsive web design on computer screens">
+          <div class="card-content">
+            <h3>Responsive Design</h3>
+            <p>
+              <code>flex-wrap: wrap</code> allows items to move to another row
+              when the browser becomes too narrow.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="settings" class="info-box">
+      <h2>Important Flexbox settings</h2>
+      <ul>
+        <li><code>display: flex</code> – activates Flexbox for the container.</li>
+        <li><code>flex-direction</code> – controls whether items are arranged in a row or column.</li>
+        <li><code>flex-wrap: wrap</code> – allows items to move onto new lines.</li>
+        <li><code>justify-content</code> – controls horizontal distribution of items.</li>
+        <li><code>align-items</code> – controls alignment on the cross axis.</li>
+        <li><code>gap</code> – creates space between flex items.</li>
+        <li><code>flex</code> – controls how individual items grow and shrink.</li>
+      </ul>
+    </section>
+
+    <section id="responsive" class="info-box">
+      <h2>How the layout responds to screen size</h2>
+      <p>
+        On a large screen the cards are displayed side by side. If the available
+        space becomes smaller, the cards wrap automatically. A media query is also
+        used at 600 pixels. On small screens the navigation changes into a vertical
+        menu and the cards are displayed in one column.
+      </p>
+    </section>
+
+    <section id="features" class="info-box">
+      <h2>Features used on this page</h2>
+      <ul>
+        <li>Responsive Flexbox navigation menu.</li>
+        <li>Hover effect for navigation links.</li>
+        <li>Active menu item highlighting.</li>
+        <li>Flexbox card layout with text and images.</li>
+        <li>Flexible card sizes using the <code>flex</code> property.</li>
+        <li>Automatic wrapping with <code>flex-wrap</code>.</li>
+        <li>Spacing with the <code>gap</code> property.</li>
+        <li>Responsive mobile layout using a CSS media query.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Flexbox Exercise – HTML & CSS</p>
+  </footer>
+
+</body>
+</html>
