@@ -1,3 +1,5 @@
+print("Program starting.")
+
 word = str(input("Insert a closed compound word: "))
 
 print(f"The word you inserted is '{word}' and in reverse it is '{word[::-1]}'.")
@@ -11,4 +13,3 @@ step = int(input("3) Step size: "))
 
 print(f"The word '{word}' sliced to the defined substring is '{word[start:ending:step]}'.")
 print("Program ending.")
-
