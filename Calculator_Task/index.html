@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three Calculator Interfaces</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#1e2b40;font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+.wrap{max-width:1050px;margin:auto;padding:34px 18px}
+h1{font-size:36px;margin:4px 0}h2{font-size:23px;margin:5px 0}.subtitle,.description,.tip{color:#67778b}.subtitle{margin-top:0}
+nav{display:flex;gap:10px;flex-wrap:wrap;margin:25px 0 22px}nav a{background:#e7edff;color:#2946a8;border-radius:10px;padding:10px 14px;text-decoration:none;font-weight:bold;font-size:14px}
+main{display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{background:white;border:1px solid #e0e6f0;border-radius:18px;padding:25px;scroll-margin-top:18px;box-shadow:0 5px 18px #1c356008}.wide{grid-column:1/-1}.tag{font-size:12px;font-weight:bold;letter-spacing:1px;color:#385cc9}
+.description{margin:4px 0 21px;font-size:14px}label{font-size:14px;font-weight:bold;display:block;margin:13px 0 7px}
+input[type=number],select{width:100%;border:1px solid #cad5e5;border-radius:9px;padding:12px;font-size:16px;background:white}
+button{font:inherit;cursor:pointer;border:0;border-radius:9px;font-weight:bold}button:focus-visible,input:focus,select:focus{outline:3px solid #b4c4ff;outline-offset:1px}
+.ops{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:18px}
+.ops button{padding:12px;background:#e9efff;color:#2c4bad;border:1px solid #cfdaff}.ops button:hover{background:#d8e4ff}
+.primary{width:100%;background:#355bc6;color:white;padding:13px;margin-top:18px}.primary:hover,.equal:hover{background:#294aa7}
+.result{background:#f0f5fc;border:1px solid #dbe6f6;border-radius:11px;padding:15px;margin-top:19px}
+.result small{display:block;color:#6a7b92;text-transform:uppercase;font-weight:bold;font-size:12px;letter-spacing:.6px}
+output{display:block;min-height:37px;font-size:26px;font-weight:bold;color:#244792;overflow-wrap:anywhere}
+output.error{font-size:15px;color:#b42318;line-height:37px}
+.keyarea{display:grid;grid-template-columns:minmax(0,410px) 1fr;gap:28px;align-items:center}
+.machine{border:1px solid #dfe5ef;background:#f6f8fc;border-radius:15px;padding:16px}
+#display-three{width:100%;background:white;border:1px solid #d3ddea;border-radius:10px;padding:15px;text-align:right;font-size:30px;font-weight:bold;color:#172f5f;margin-bottom:12px}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.keys button{padding:14px 0;background:white;border:1px solid #e0e6f0;font-size:18px}
+.keys button:hover{background:#eef2f9}.keys .function{background:#e7edfa;color:#3254aa}.keys .operator{background:#dce6ff;color:#3455b5}.keys .equal{background:#355bc6;color:white}
+.tip{font-size:14px}footer{text-align:center;color:#718099;font-size:13px;margin-top:26px}
+@media(max-width:760px){main,.keyarea{grid-template-columns:1fr}.wide{grid-column:auto}.card{padding:20px}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<span class="tag">HTML • CSS • JAVASCRIPT</span>
+<h1>Three Calculator Interfaces</h1>
+<p class="subtitle">Three different ways to add, subtract, multiply and divide. Each calculator has its own result area.</p>
+<nav aria-label="Calculator links">
+<a href="#calculator-one">1. Operation buttons</a>
+<a href="#calculator-two">2. Dropdown menu</a>
+<a href="#calculator-three">3. Number keypad</a>
+</nav>
+</header>
+<main>
+<section id="calculator-one" class="card">
+<span class="tag">INTERFACE 1</span><h2>Operation Buttons</h2>
+<p class="description">Enter two numbers and choose an operation.</p>
+<label for="number-one-a">First number</label><input id="number-one-a" type="number" step="any" placeholder="Example: 12">
+<label for="number-one-b">Second number</label><input id="number-one-b" type="number" step="any" placeholder="Example: 3">
+<div class="ops">
+<button type="button" id="button-add" data-op="+" aria-label="Add">+</button>
+<button type="button" id="button-subtract" data-op="-" aria-label="Subtract">−</button>
+<button type="button" id="button-multiply" data-op="*" aria-label="Multiply">×</button>
+<button type="button" id="button-divide" data-op="/" aria-label="Divide">÷</button>
+</div>
+<div class="result"><small>Result</small><output id="result-one" aria-live="polite">—</output></div>
+</section>
+<section id="calculator-two" class="card">
+<span class="tag">INTERFACE 2</span><h2>Dropdown Calculator</h2>
+<p class="description">Select the mathematical operation from a menu.</p>
+<form id="form-two">
+<label for="number-two-a">First number</label><input id="number-two-a" type="number" step="any" placeholder="Example: 20">
+<label for="number-two-b">Second number</label><input id="number-two-b" type="number" step="any" placeholder="Example: 5">
+<label for="operation-two">Choose operation</label>
+<select id="operation-two"><option value="+">Addition (+)</option><option value="-">Subtraction (−)</option><option value="*">Multiplication (×)</option><option value="/">Division (÷)</option></select>
+<button type="submit" id="calculate-two" class="primary">Calculate</button>
+</form>
+<div class="result"><small>Result</small><output id="result-two" aria-live="polite">—</output></div>
+</section>
+<section id="calculator-three" class="card wide">
+<span class="tag">INTERFACE 3</span><h2>Keypad Calculator</h2>
+<p class="description">Click the buttons or click the keypad area and use your keyboard.</p>
+<div class="keyarea">
+<div class="machine" id="keypad" tabindex="0" aria-label="Keyboard calculator">
+<input id="display-three" type="text" value="0" readonly aria-label="Calculator display">
+<div class="keys">
+<button id="key-clear" class="function" data-key="C" type="button">C</button>
+<button id="key-sign" class="function" data-key="sign" type="button">+/−</button>
+<button id="key-percent" class="function" data-key="%" type="button">%</button>
+<button id="key-divide" class="operator" data-key="/" type="button">÷</button>
+<button id="key-seven" data-key="7" type="button">7</button>
+<button id="key-eight" data-key="8" type="button">8</button>
+<button id="key-nine" data-key="9" type="button">9</button>
+<button id="key-multiply" class="operator" data-key="*" type="button">×</button>
+<button id="key-four" data-key="4" type="button">4</button>
+<button id="key-five" data-key="5" type="button">5</button>
+<button id="key-six" data-key="6" type="button">6</button>
+<button id="key-subtract" class="operator" data-key="-" type="button">−</button>
+<button id="key-one" data-key="1" type="button">1</button>
+<button id="key-two" data-key="2" type="button">2</button>
+<button id="key-three" data-key="3" type="button">3</button>
+<button id="key-add" class="operator" data-key="+" type="button">+</button>
+<button id="key-back" class="function" data-key="back" type="button">⌫</button>
+<button id="key-zero" data-key="0" type="button">0</button>
+<button id="key-decimal" data-key="." type="button">.</button>
+<button id="key-equals" class="equal" data-key="=" type="button">=</button>
+</div></div>
+<div>
+<div class="result"><small>Result</small><output id="result-three" aria-live="polite">0</output></div>
+<p class="tip"><b>Tips:</b> C clears the calculator, ⌫ removes a digit, +/− changes the sign and % divides the displayed number by 100.</p>
+</div></div>
+</section>
+</main><footer>Calculator task • All code is in this HTML file; no external JavaScript files.</footer>
+</div>
+<script>
+function calculate(a,b,op){
+ if(op==='+')return a+b;
+ if(op==='-')return a-b;
+ if(op==='*')return a*b;
+ if(op==='/'){if(b===0)throw Error('Cannot divide by zero.');return a/b;}
+ throw Error('Invalid operation.');
+}
+function formatted(value){
+ if(!Number.isFinite(value))throw Error('Result is too large.');
+ return Object.is(value,-0)?'0':String(Number(value.toPrecision(12)));
+}
+function inputs(first,second){
+ const a=document.getElementById(first).value;
+ const b=document.getElementById(second).value;
+ if(a.trim()===''||b.trim()==='')throw Error('Please enter both numbers.');
+ if(!Number.isFinite(Number(a))||!Number.isFinite(Number(b)))throw Error('Please enter valid numbers.');
+ return [Number(a),Number(b)];
+}
+function show(id,value,error=false){
+ const out=document.getElementById(id);
+ out.textContent=value;
+ out.classList.toggle('error',error);
+}
+// Interface 1
+document.querySelectorAll('#calculator-one [data-op]').forEach(button=>{
+ button.addEventListener('click',()=>{
+  try{const [a,b]=inputs('number-one-a','number-one-b');show('result-one',formatted(calculate(a,b,button.dataset.op)));}
+  catch(error){show('result-one',error.message,true);}
+ });
+});
+// Interface 2
+document.getElementById('form-two').addEventListener('submit',event=>{
+ event.preventDefault();
+ try{const [a,b]=inputs('number-two-a','number-two-b');show('result-two',formatted(calculate(a,b,document.getElementById('operation-two').value)));}
+ catch(error){show('result-two',error.message,true);}
+});
+// Interface 3
+let current='0',previous=null,operator=null,newNumber=false,hasError=false;
+function update(){document.getElementById('display-three').value=current;show('result-three',current,hasError);}
+function press(key){
+ if(key==='C'){current='0';previous=null;operator=null;newNumber=false;hasError=false;update();return;}
+ if(hasError)return;
+ if(/^[0-9]$/.test(key)){
+  if(newNumber||current==='0')current=key;
+  else if(current.replace(/\D/g,'').length<14)current+=key;
+  newNumber=false;
+ }else if(key==='.'){
+  if(newNumber){current='0.';newNumber=false;}
+  else if(!current.includes('.'))current+='.';
+ }else if(key==='sign'){
+  if(current!=='0')current=current[0]==='-'?current.slice(1):'-'+current;
+ }else if(key==='%'){
+  current=formatted(Number(current)/100);
+ }else if(key==='back'){
+  if(newNumber||current.length===1||current.length===2&&current[0]==='-')current='0';
+  else current=current.slice(0,-1);
+  newNumber=false;
+ }else if(['+','-','*','/'].includes(key)){
+  if(operator&&!newNumber){
+   try{current=formatted(calculate(previous,Number(current),operator));}
+   catch(error){current=error.message;hasError=true;update();return;}
+  }
+  previous=Number(current);operator=key;newNumber=true;
+ }else if(key==='='){
+  if(operator&&!newNumber){
+   try{current=formatted(calculate(previous,Number(current),operator));}
+   catch(error){current=error.message;hasError=true;}
+   previous=null;operator=null;newNumber=true;
+  }
+ }
+ update();
+}
+document.querySelectorAll('#keypad [data-key]').forEach(button=>button.addEventListener('click',()=>press(button.dataset.key)));
+document.getElementById('keypad').addEventListener('keydown',event=>{
+ let key=event.key;
+ if(key==='Enter')key='=';
+ else if(key==='Escape')key='C';
+ else if(key==='Backspace')key='back';
+ else if(key==='x'||key==='X')key='*';
+ if(/^[0-9]$/.test(key)||['+','-','*','/','.','=','C','back'].includes(key)){event.preventDefault();press(key);}
+});
+</script>
+</body>
+</html>
