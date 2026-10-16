@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Three JavaScript number exercises: factorial, sum from 1 to N, and odd and even sums.">
+  <title>JavaScript Number Programs | HTML, CSS &amp; JS</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d2b3d;
+      --muted: #5d6d82;
+      --line: #dfe6f0;
+      --blue: #2559cb;
+      --bg: #f2f5fa;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.5; }
+    .wrap { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+    header { background: #10264b; color: white; padding: 43px 0 38px; }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: #aac5ff; }
+    h1 { font-size: clamp(29px, 4.3vw, 43px); margin: 9px 0 12px; letter-spacing: -.035em; line-height: 1.2; }
+    header p { color: #d2e0f6; max-width: 690px; margin: 0; }
+    main { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: 28px 0 26px; }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 17px; padding: 25px; box-shadow: 0 5px 20px rgba(16,38,75,.04); min-width: 0; }
+    .card.full { grid-column: 1 / -1; }
+    .card-top { display: flex; align-items: center; gap: 12px; }
+    .number { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 10px; color: #2559cb; background: #e9f0ff; font-weight: 700; }
+    h2 { font-size: 22px; line-height: 1.2; margin: 0; }
+    .description { min-height: 45px; margin: 13px 0 17px; color: var(--muted); font-size: 14px; }
+    label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 7px; }
+    .controls { display: flex; gap: 10px; }
+    input { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid #bac8dc; border-radius: 9px; font: inherit; font-size: 16px; color: var(--ink); }
+    input:focus-visible, button:focus-visible { outline: 3px solid #91b6ff; outline-offset: 2px; }
+    button { border: 0; background: var(--blue); color: #fff; cursor: pointer; border-radius: 9px; padding: 12px 19px; font-weight: 700; font-size: 15px; white-space: nowrap; }
+    button:hover { background: #1746a9; }
+    .result { margin-top: 18px; border: 1px solid #d8e4f4; background: #f2f7ff; border-radius: 11px; padding: 14px 16px; }
+    .result-title { display: block; color: #476180; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .result-value { display: block; margin-top: 4px; color: #174aaf; font-size: 25px; font-weight: 700; overflow-wrap: anywhere; line-height: 1.4; }
+    .result-value.error { color: #b42318; font-size: 16px; }
+    .work { font-size: 13px; color: #61718a; overflow-wrap: anywhere; margin-top: 9px; min-height: 20px; }
+    .two-results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .two-results .result { margin-top: 18px; }
+    .hint { margin: 15px 0 0; font-size: 13px; color: var(--muted); }
+    footer { padding: 0 0 34px; color: #6b788d; text-align: center; font-size: 13px; }
+    @media (max-width: 700px) { main { grid-template-columns: 1fr; } .card.full { grid-column: auto; } .card { padding: 20px; } .description { min-height: 0; } }
+    @media (max-width: 390px) { .controls { flex-direction: column; } button { width: 100%; } .two-results { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">HTML • CSS • JavaScript</div>
+      <h1>Three Number Programs</h1>
+      <p>Enter a whole number and calculate its factorial, the sum from 1 to N, or the separate sums of odd and even numbers.</p>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="card" aria-labelledby="factorial-heading">
+      <div class="card-top"><span class="number">01</span><h2 id="factorial-heading">Factorial (N!)</h2></div>
+      <p class="description">Multiply all whole numbers from 1 through N. By definition, 0! = 1; negative factorials are unspecified here.</p>
+      <form id="factorial-form" novalidate>
+        <label for="factorial-input">Enter N</label>
+        <div class="controls">
+          <input id="factorial-input" name="factorial-input" type="text" inputmode="numeric" value="5" placeholder="e.g. 5" autocomplete="off" aria-describedby="factorial-hint">
+          <button id="factorial-button" type="submit">Calculate</button>
+        </div>
+      </form>
+      <div class="result" role="status" aria-live="polite">
+        <span class="result-title">Answer</span>
+        <output id="factorial-result" class="result-value" for="factorial-input">—</output>
+      </div>
+      <div id="factorial-work" class="work"></div>
+      <p id="factorial-hint" class="hint">Try N = 5, 0, or -5. For fast results, N must not exceed 2000.</p>
+    </section>
+
+    <section class="card" aria-labelledby="sum-heading">
+      <div class="card-top"><span class="number">02</span><h2 id="sum-heading">Sum from 1 to N</h2></div>
+      <p class="description">Add every number from 1 to N. For example: 1 + 2 + ... + 10 = 55.</p>
+      <form id="sum-form" novalidate>
+        <label for="sum-input">Enter N (at least 1)</label>
+        <div class="controls">
+          <input id="sum-input" name="sum-input" type="text" inputmode="numeric" value="10" placeholder="e.g. 10" autocomplete="off">
+          <button id="sum-button" type="submit">Calculate</button>
+        </div>
+      </form>
+      <div class="result" role="status" aria-live="polite">
+        <span class="result-title">Answer</span>
+        <output id="sum-result" class="result-value" for="sum-input">—</output>
+      </div>
+      <div id="sum-work" class="work"></div>
+      <p class="hint">This task uses the sum 1 + 2 + ... + N (not the digits of N).</p>
+    </section>
+
+    <section class="card full" aria-labelledby="odd-even-heading">
+      <div class="card-top"><span class="number">03</span><h2 id="odd-even-heading">Odd and Even Number Sums</h2></div>
+      <p class="description">Find two separate totals: all odd numbers from 1 to N, and all even numbers from 1 to N.</p>
+      <form id="odd-even-form" novalidate>
+        <label for="odd-even-input">Enter N (at least 1)</label>
+        <div class="controls">
+          <input id="odd-even-input" name="odd-even-input" type="text" inputmode="numeric" value="10" placeholder="e.g. 10" autocomplete="off">
+          <button id="odd-even-button" type="submit">Calculate</button>
+        </div>
+      </form>
+      <div class="two-results" role="status" aria-live="polite">
+        <div class="result"><span class="result-title">Sum of Odd</span><output id="odd-result" class="result-value" for="odd-even-input">—</output></div>
+        <div class="result"><span class="result-title">Sum of Even</span><output id="even-result" class="result-value" for="odd-even-input">—</output></div>
+      </div>
+      <div id="odd-even-work" class="work"></div>
+      <p class="hint">Example: N = 10 gives Sum of Odd = 25 and Sum of Even = 30.</p>
+    </section>
+  </main>
+  <footer>Course exercises • All styles and JavaScript are embedded in this single HTML file.</footer>
+
+  <script>
+    'use strict';
+
+    // Read an exact integer (including negative numbers) without rounding.
+    function readInteger(inputId) {
+      const raw = document.getElementById(inputId).value.trim();
+      if (raw === '') throw new Error('Please enter a whole number.');
+      if (!/^[+-]?\d+$/.test(raw)) throw new Error('Please enter a valid whole number (no decimals).');
+      if (raw.replace(/^[+-]?0*/, '').length > 150) throw new Error('Please enter a shorter number.');
+      return BigInt(raw);
+    }
+
+    function displayResult(id, value, isError = false) {
+      const output = document.getElementById(id);
+      output.textContent = String(value);
+      output.classList.toggle('error', isError);
+    }
+
+    // Exercise 1: 0! = 1, factorial of a negative number is unspecified.
+    function calculateFactorial() {
+      const work = document.getElementById('factorial-work');
+      work.textContent = '';
+      let n;
+      try { n = readInteger('factorial-input'); }
+      catch (error) { displayResult('factorial-result', error.message, true); return; }
+
+      if (n < 0n) { displayResult('factorial-result', 'Unspecified', true); return; }
+      if (n > 2000n) { displayResult('factorial-result', 'Please enter N ≤ 2000.', true); return; }
+
+      let answer = 1n;
+      for (let i = 2n; i <= n; i++) answer *= i;
+      displayResult('factorial-result', answer);
+      if (n === 0n) work.textContent = '0! = 1 (by definition).';
+      else if (n <= 12n) work.textContent = n + '! = ' + Array.from({length: Number(n)}, (_, i) => i + 1).join(' × ');
+      else work.textContent = n + '! = 1 × 2 × ... × ' + n;
+    }
+
+    // Exercise 2: the problem example makes clear it means 1 + 2 + ... + N.
+    function calculateSum() {
+      const work = document.getElementById('sum-work');
+      work.textContent = '';
+      let n;
+      try { n = readInteger('sum-input'); }
+      catch (error) { displayResult('sum-result', error.message, true); return; }
+
+      if (n < 1n) { displayResult('sum-result', 'N must be at least 1.', true); return; }
+      const answer = n * (n + 1n) / 2n;
+      displayResult('sum-result', answer);
+      if (n <= 15n) work.textContent = Array.from({length: Number(n)}, (_, i) => i + 1).join(' + ') + ' = ' + answer;
+      else work.textContent = n + ' × (' + n + ' + 1) ÷ 2 = ' + answer;
+    }
+
+    // Exercise 3: there are ceil(N/2) odd and floor(N/2) even terms.
+    // The first k odd integers total k²; first k even integers total k(k+1).
+    function calculateOddEven() {
+      const work = document.getElementById('odd-even-work');
+      work.textContent = '';
+      let n;
+      try { n = readInteger('odd-even-input'); }
+      catch (error) {
+        displayResult('odd-result', error.message, true);
+        displayResult('even-result', error.message, true);
+        return;
+      }
+
+      if (n < 1n) {
+        displayResult('odd-result', 'N must be at least 1.', true);
+        displayResult('even-result', 'N must be at least 1.', true);
+        return;
+      }
+      const oddCount = (n + 1n) / 2n;
+      const evenCount = n / 2n;
+      const oddSum = oddCount * oddCount;
+      const evenSum = evenCount * (evenCount + 1n);
+      displayResult('odd-result', oddSum);
+      displayResult('even-result', evenSum);
+      if (n <= 20n) {
+        const odds = [], evens = [];
+        for (let i = 1n; i <= n; i++) (i % 2n === 1n ? odds : evens).push(String(i));
+        work.textContent = 'Odd: ' + odds.join(' + ') + ' = ' + oddSum + ' | Even: ' + (evens.join(' + ') || 'none') + ' = ' + evenSum;
+      } else {
+        work.textContent = 'Odd: ' + oddCount + '² = ' + oddSum + ' | Even: ' + evenCount + ' × (' + evenCount + ' + 1) = ' + evenSum;
+      }
+    }
+
+    document.getElementById('factorial-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      calculateFactorial();
+    });
+    document.getElementById('sum-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      calculateSum();
+    });
+    document.getElementById('odd-even-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      calculateOddEven();
+    });
+  </script>
+</body>
+</html>
