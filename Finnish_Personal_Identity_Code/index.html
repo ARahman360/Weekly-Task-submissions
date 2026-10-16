@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HTML, CSS and JavaScript course exercise: validate and construct a Finnish personal identity code.">
+  <title>Finnish Personal Identity Code | JavaScript Assignment</title>
+  <style>
+    :root { --background:#f3f6fb; --card:#fff; --ink:#16253c; --muted:#60708b; --border:#dce5f1; --blue:#2859c5; --pale:#edf3ff; --good:#13704d; --bad:#a72f30; }
+    * {box-sizing:border-box}
+    body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); background:var(--background); line-height:1.5; }
+    .wrap {max-width:1100px; margin:0 auto; padding:32px 20px 40px}
+    .hero {padding:26px 28px 28px; border-radius:18px; background:#173468; color:#fff; margin-bottom:24px}
+    .eyebrow {font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#c3d4ff; font-weight:700}
+    h1 {font-size:clamp(27px,4vw,37px); line-height:1.17; margin:9px 0 10px}
+    .hero p {margin:0; color:#dfebff; max-width:700px; font-size:15px}
+    .chips {display:flex; flex-wrap:wrap; gap:9px; margin-top:18px}
+    .chip {background:#2a4b83; border:1px solid #45669a; border-radius:30px; padding:5px 10px; font-size:12px; color:#f0f5ff}
+    .columns {display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:21px; align-items:start}
+    .card {background:var(--card); border:1px solid var(--border); border-radius:17px; padding:24px; box-shadow:0 7px 26px #19345b08}
+    .card h2 {font-size:21px; line-height:1.27; margin:5px 0 9px}
+    .card h3 {font-size:16px; margin:3px 0 14px}
+    .number {color:var(--blue); font-size:12px; letter-spacing:.1em; font-weight:800; text-transform:uppercase}
+    .help {color:var(--muted); font-size:13px; margin:0 0 20px}
+    .field {margin:0 0 15px}
+    label {display:block; font-weight:700; font-size:13px; margin-bottom:6px}
+    input,select {width:100%; min-height:46px; padding:11px 12px; border-radius:9px; border:1px solid #c4d2e4; background:#fff; color:var(--ink); font-size:15px; font-family:inherit}
+    input:focus,select:focus,button:focus-visible {outline:3px solid #adcbff; outline-offset:2px}
+    .hint {display:block; font-size:12px; color:var(--muted); margin-top:5px}
+    .row2 {display:grid; grid-template-columns:1fr 1fr; gap:13px}
+    .button {border:0; color:#fff; background:var(--blue); padding:12px 16px; border-radius:9px; font-size:14px; font-weight:700; cursor:pointer; width:100%; min-height:45px}
+    .button:hover {background:#1e48a9}
+    .result {border:1px solid #dae4f2; padding:16px; margin-top:17px; border-radius:11px; background:#f5f8fd; min-height:76px}
+    .result .result-tag {display:block; color:#67788c; text-transform:uppercase; font-size:11px; letter-spacing:.09em; font-weight:700}
+    .result .status {font-size:19px; font-weight:800; margin-top:3px; overflow-wrap:anywhere}
+    .result .details {font-size:13px; line-height:1.7; margin-top:8px; white-space:pre-line; overflow-wrap:anywhere}
+    .result.good {background:#f1fbf6; border-color:#bce8d0}
+    .result.good .status {color:var(--good)}
+    .result.bad {background:#fff5f5; border-color:#f1caca}
+    .result.bad .status {color:var(--bad)}
+    .separator {margin:24px 0 19px; border:0; border-top:1px solid var(--border)}
+    .explainer {margin-top:23px; background:#fff; border:1px solid var(--border); border-radius:15px; padding:20px 23px}
+    .explainer h2 {font-size:18px; margin:0 0 10px}
+    .steps {display:grid; grid-template-columns:repeat(3,1fr); gap:13px}
+    .step {background:#f5f8fd; padding:14px; border-radius:10px; color:var(--muted); font-size:13px}
+    .step strong {color:var(--ink); display:block; margin-bottom:4px}
+    code {background:#eaf0fb; padding:2px 4px; border-radius:4px; font-size:12px}
+    .foot {color:var(--muted); font-size:12px; padding:17px 2px 0}
+    .foot a {color:#2255b4}
+    @media(max-width:790px){.columns{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.wrap{padding:14px}.card{padding:18px}.hero{padding:22px}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <span class="eyebrow">HTML · CSS · JavaScript | Course assignment</span>
+    <h1>Finnish Personal Identity Code</h1>
+    <p>Check a personal identity code (HETU) or calculate a new check character using valid dates, century markers and individual numbers.</p>
+    <div class="chips"><span class="chip">Date and leap-year validation</span><span class="chip">Modulo 31 check character</span><span class="chip">Age and sex information</span></div>
+  </header>
+  <div class="columns">
+    <section class="card" aria-labelledby="validate-heading">
+      <span class="number">Part 01 — Validation</span>
+      <h2 id="validate-heading">Check an identity code</h2>
+      <p class="help">Enter all 11 characters together. Format: <strong>DDMMYYXNNNC</strong> (day, month, year, century character, individual number, and check character).</p>
+      <form id="validation-form" novalidate>
+        <div class="field"><label for="identity-code">Personal identity code</label>
+          <input id="identity-code" name="identityCode" maxlength="11" autocomplete="off" spellcheck="false" value="131052-308T" required aria-describedby="validate-hint">
+          <span class="hint" id="validate-hint">Example: 131052-308T (13 October 1952)</span>
+        </div>
+        <button class="button" id="validate-button" type="submit">Validate identity code</button>
+      </form>
+      <div id="validation-result" class="result" role="status" aria-live="polite">
+        <span class="result-tag">Validation result</span><div class="status">Ready to check</div><div class="details">Enter a code and press Validate.</div>
+      </div>
+    </section>
+    <section class="card" aria-labelledby="generate-heading">
+      <span class="number">Part 02 — Generation</span>
+      <h2 id="generate-heading">Create a check character</h2>
+      <p class="help">Enter the full birth date as <strong>DD/MM/YYYY</strong>, choose F or M, the century symbol, and a three-digit individual number from 002 to 899.</p>
+      <form id="generation-form" novalidate>
+        <div class="field"><label for="birth-date">Date of birth (DD/MM/YYYY)</label>
+          <input id="birth-date" name="birthDate" type="text" inputmode="numeric" maxlength="10" value="13/10/1952" placeholder="DD/MM/YYYY" required>
+          <span class="hint">February has 29 days only in a leap year.</span>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="sex">Sex (F/M)</label>
+            <select id="sex" name="sex" required><option value="F" selected>F — Female</option><option value="M">M — Male</option></select>
+          </div>
+          <div class="field"><label for="century">Century marker</label>
+            <select id="century" name="century" required><option value="+">+ — 1800s</option><option value="-" selected>- — 1900s</option><option value="A">A — 2000s</option></select>
+          </div>
+        </div>
+        <div class="field"><label for="individual-number">Individual number (002–899)</label>
+          <input id="individual-number" name="individualNumber" type="text" inputmode="numeric" maxlength="3" value="308" placeholder="e.g. 308" required>
+          <span class="hint">Even number = F, odd number = M. Include leading zeros when needed (e.g. 002).</span>
+        </div>
+        <button class="button" id="generate-button" type="submit">Generate check character</button>
+      </form>
+      <div id="generation-result" class="result" role="status" aria-live="polite">
+        <span class="result-tag">Generated result</span><div class="status">Ready to generate</div><div class="details">Fill in the information above.</div>
+      </div>
+      <hr class="separator">
+      <h3>Have the first 10 characters already?</h3>
+      <p class="help">Enter the initial part <strong>DDMMYYXNNN</strong> to find its final check character. Example: <strong>131052-308 → T</strong>.</p>
+      <form id="partial-form" novalidate>
+        <div class="field"><label for="partial-code">Initial part of code</label>
+          <input id="partial-code" name="partialCode" maxlength="10" value="131052-308" autocomplete="off" spellcheck="false" required>
+        </div>
+        <button class="button" id="partial-button" type="submit">Find final character</button>
+      </form>
+      <div id="partial-result" class="result" role="status" aria-live="polite">
+        <span class="result-tag">Check character</span><div class="status">Ready to calculate</div><div class="details">Enter the 10-character initial part.</div>
+      </div>
+    </section>
+  </div>
+  <section class="explainer" aria-labelledby="how-heading">
+    <h2 id="how-heading">How the program works</h2>
+    <div class="steps">
+      <div class="step"><strong>1. Check the date</strong> Validate month 1–12, exact days per month, leap years and century marker.</div>
+      <div class="step"><strong>2. Check the number</strong> Individual number 002–899; even means female and odd means male in this format.</div>
+      <div class="step"><strong>3. Calculate the character</strong> Combine DDMMYY and NNN, divide by 31 and look up the remainder in <code>0123456789ABCDEFHJKLMNPRSTUVWXY</code>.</div>
+    </div>
+    <p class="foot">Educational demonstration only. A mathematically valid identity code is not proof it has been issued to a real person. Avoid using actual personal identity codes when testing. Validator recognises the additional Finnish century markers introduced from 2023; the generator uses +, - and A as requested in the assignment. Sources: <a href="https://dvv.fi/en/personal-identity-code" target="_blank" rel="noopener noreferrer">DVV</a>, <a href="https://stat.fi/meta/kas/hetu.html" target="_blank" rel="noopener noreferrer">Statistics Finland</a>.</p>
+  </section>
+</main>
+<script>
+  // The lookup string has one character for each possible remainder (0 to 30).
+  const CHECK_CHARACTERS = "0123456789ABCDEFHJKLMNPRSTUVWXY";
+  const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+  function isLeapYear(year) {
+    return year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0);
+  }
+
+  function daysInMonth(month, year) {
+    if (month === 2) return isLeapYear(year) ? 29 : 28;
+    if ([4, 6, 9, 11].includes(month)) return 30;
+    return 31;
+  }
+
+  // Our own DD/MM/YYYY and DDMMYY date-checking function.
+  function checkDate(day, month, year) {
+    if (!Number.isInteger(year) || year < 1800 || year > 2099) return "Year must be between 1800 and 2099.";
+    if (!Number.isInteger(month) || month < 1 || month > 12) return "Month is incorrect (must be 1–12).";
+    if (!Number.isInteger(day) || day < 1 || day > daysInMonth(month, year)) {
+      return "Day is wrong for the selected month and year (" + daysInMonth(month, year) + " days).";
+    }
+    const now = new Date();
+    const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    if (Date.UTC(year, month - 1, day) > today) return "Date of birth cannot be in the future.";
+    return "";
+  }
+
+  function centuryFromMarker(marker) {
+    if (marker === "+") return 1800;
+    if (marker === "-" || "YXWVU".includes(marker)) return 1900;
+    if ("ABCDEF".includes(marker)) return 2000;
+    return null;
+  }
+
+  function calculateCheckCharacter(sixDigitBirth, threeDigitIndividual) {
+    const nineDigits = sixDigitBirth + threeDigitIndividual;
+    const remainder = Number(nineDigits) % 31;
+    return {remainder: remainder, character: CHECK_CHARACTERS[remainder]};
+  }
+
+  function parseInitialPart(raw) {
+    const input = raw.trim().toUpperCase();
+    const match = /^(\d{2})(\d{2})(\d{2})([+\-A-FUVWXY])(\d{3})$/.exec(input);
+    if (!match) return {error:"Incorrect format. Use DDMMYYXNNN, for example 131052-308."};
+    const day = Number(match[1]);
+    const month = Number(match[2]);
+    const year2 = Number(match[3]);
+    const marker = match[4];
+    const century = centuryFromMarker(marker);
+    const fullYear = century + year2;
+    const dateError = checkDate(day, month, fullYear);
+    if (dateError) return {error:dateError};
+    const individual = Number(match[5]);
+    if (individual < 2 || individual > 899) return {error:"Individual number must be from 002 to 899."};
+    const check = calculateCheckCharacter(match[1] + match[2] + match[3], match[5]);
+    return {input,day,month,fullYear,marker,individual,sex:individual % 2 === 0 ? "Female" : "Male",check};
+  }
+
+  // Adding months with a clamped day prevents invalid dates such as 31 February.
+  function addMonthsClamped(date, months) {
+    const first = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + months, 1));
+    const year = first.getUTCFullYear();
+    const month = first.getUTCMonth();
+    const day = Math.min(date.getUTCDate(), daysInMonth(month + 1, year));
+    return new Date(Date.UTC(year, month, day));
+  }
+
+  function calculateAge(day, month, year) {
+    const dob = new Date(Date.UTC(year, month - 1, day));
+    const now = new Date();
+    const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    let years = today.getUTCFullYear() - year;
+    if (addMonthsClamped(dob, years * 12) > today) years--;
+    let months = 0;
+    while (months < 11 && addMonthsClamped(dob, years * 12 + months + 1) <= today) months++;
+    const anniversary = addMonthsClamped(dob, years * 12 + months);
+    const days = Math.round((today - anniversary) / MS_PER_DAY);
+    return {years, months, days};
+  }
+
+  function showResult(id, isValid, headline, details) {
+    const box = document.getElementById(id);
+    box.className = "result " + (isValid ? "good" : "bad");
+    box.querySelector(".status").textContent = headline;
+    const detailBox = box.querySelector(".details");
+    if (detailBox) detailBox.textContent = details || "";
+  }
+
+  function validateIdentityCode(raw) {
+    const input = raw.trim().toUpperCase();
+    if (input.length !== 11) return {error:"The identity code must contain exactly 11 characters."};
+    const part = parseInitialPart(input.slice(0,10));
+    if (part.error) return part;
+    if (!CHECK_CHARACTERS.includes(input[10])) return {error:"The final check character is invalid."};
+    if (input[10] !== part.check.character) {
+      return {error:"Incorrect check character: expected " + part.check.character + ", but found " + input[10] + "."};
+    }
+    return {...part, valid:true, age:calculateAge(part.day,part.month,part.fullYear)};
+  }
+
+  // PART 1: Validate a full identity code.
+  document.getElementById("validation-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const answer = validateIdentityCode(document.getElementById("identity-code").value);
+    if (answer.error) {
+      showResult("validation-result", false, "Valid: false", answer.error);
+      return;
+    }
+    const age = answer.age;
+    const date = String(answer.day).padStart(2,"0") + "/" + String(answer.month).padStart(2,"0") + "/" + answer.fullYear;
+    showResult("validation-result", true, "Valid: true", "Sex: " + answer.sex + "\nAge: " + age.years + " years (" + age.years + " years, " + age.months + " months, " + age.days + " days)\nDate of birth: " + date + "\nCheck remainder: " + answer.check.remainder + " → " + answer.check.character);
+  });
+
+  // PART 2A: Generate the full result using DD/MM/YYYY, F/M, century and NNN.
+  document.getElementById("generation-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const dateText = document.getElementById("birth-date").value.trim();
+    const dateMatch = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(dateText);
+    if (!dateMatch) return showResult("generation-result", false, "Input error", "Enter date in exactly DD/MM/YYYY format, for example 13/10/1952.");
+    const day = Number(dateMatch[1]);
+    const month = Number(dateMatch[2]);
+    const year = Number(dateMatch[3]);
+    const dateError = checkDate(day, month, year);
+    if (dateError) return showResult("generation-result", false, "Input error", dateError);
+    const marker = document.getElementById("century").value;
+    if (centuryFromMarker(marker) !== Math.floor(year / 100) * 100) return showResult("generation-result", false, "Input error", "Century marker does not match the birth year. Use + for 1800s, - for 1900s or A for 2000s.");
+    const individualText = document.getElementById("individual-number").value.trim();
+    if (!/^\d{3}$/.test(individualText)) return showResult("generation-result", false, "Input error", "The individual number must have exactly three digits, such as 002 or 308.");
+    const individual = Number(individualText);
+    if (individual < 2 || individual > 899) return showResult("generation-result", false, "Input error", "Individual number must be between 002 and 899.");
+    const selectedSex = document.getElementById("sex").value;
+    if ((selectedSex === "F" && individual % 2 !== 0) || (selectedSex === "M" && individual % 2 !== 1)) {
+      return showResult("generation-result", false, "Input error", "Sex and individual number do not match. F requires even; M requires odd.");
+    }
+    const sixDigits = dateMatch[1] + dateMatch[2] + dateMatch[3].slice(-2);
+    const initialPart = sixDigits + marker + individualText;
+    const check = calculateCheckCharacter(sixDigits, individualText);
+    showResult("generation-result", true, initialPart + check.character, "Final character: " + check.character + "\nCalculation: " + sixDigits + individualText + " % 31 = " + check.remainder + "\nFormat and date checks passed. This does not establish that a real code was issued.");
+  });
+
+  // PART 2B: Calculate only the check character given DDMMYYXNNN.
+  document.getElementById("partial-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const data = parseInitialPart(document.getElementById("partial-code").value);
+    if (data.error) return showResult("partial-result", false, "Invalid initial part", data.error);
+    showResult("partial-result", true, data.check.character, "Full code: " + data.input + data.check.character + " | Remainder: " + data.check.remainder);
+  });
+</script>
+</body>
+</html>
