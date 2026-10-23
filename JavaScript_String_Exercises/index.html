@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Three JavaScript exercises: count the letter L, count vowels, and check a palindrome.">
+  <title>JavaScript String Exercises | Three Tasks</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --ink: #1d2a3d;
+      --muted: #627288;
+      --blue: #2555b8;
+      --border: #dce5f0;
+      --background: #f3f6fb;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--background); color: var(--ink); line-height: 1.5; }
+    .page { width: min(1080px, calc(100% - 36px)); margin: 0 auto; }
+    header { padding: 46px 0 30px; }
+    .eyebrow { font-size: 12px; color: var(--blue); font-weight: 800; text-transform: uppercase; letter-spacing: .14em; }
+    h1 { font-size: clamp(28px, 4.2vw, 42px); letter-spacing: -.04em; line-height: 1.15; margin: 10px 0 13px; }
+    .intro { color: var(--muted); max-width: 720px; margin: 0; }
+    .tasks { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; margin-bottom: 26px; }
+    .task { background: white; padding: 27px; border: 1px solid var(--border); border-radius: 17px; box-shadow: 0 5px 22px #13294c0a; }
+    .task.wide { grid-column: 1 / -1; }
+    .task-number { font-size: 12px; font-weight: 800; color: var(--blue); letter-spacing: .08em; text-transform: uppercase; }
+    h2 { font-size: 23px; margin: 7px 0; letter-spacing: -.02em; }
+    .task-desc { font-size: 14px; color: var(--muted); margin: 0 0 23px; min-height: 42px; }
+    label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    input { display: block; width: 100%; font: inherit; color: var(--ink); background: white; border: 1px solid #bfccdd; border-radius: 9px; padding: 12px 13px; }
+    input:focus-visible, button:focus-visible { outline: 3px solid #adc7ff; outline-offset: 2px; }
+    .actions { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-top: 15px; }
+    button { font: inherit; cursor: pointer; border-radius: 9px; font-weight: 700; padding: 11px 17px; }
+    .primary { color: white; background: var(--blue); border: 1px solid var(--blue); }
+    .primary:hover { background: #173f96; }
+    .sample { color: #2b4e8d; background: #eff4ff; border: 1px solid #d5e2ff; }
+    .sample:hover { background: #e1ebff; }
+    .result { margin-top: 20px; background: #eff4fa; padding: 17px; border-radius: 11px; border: 1px solid #dce6f3; min-height: 92px; }
+    .result-title { display: block; text-transform: uppercase; font-weight: 800; font-size: 11px; letter-spacing: .09em; color: #59708d; margin-bottom: 7px; }
+    output { display: block; color: #153e86; font-size: 17px; font-weight: 700; overflow-wrap: anywhere; }
+    output.error { color: #ab2727; }
+    .hint { font-size: 13px; color: var(--muted); margin-top: 12px; }
+    footer { color: var(--muted); font-size: 13px; text-align: center; padding: 0 0 38px; }
+    @media (max-width: 740px) {
+      header { padding-top: 27px; }
+      .tasks { grid-template-columns: 1fr; }
+      .task.wide { grid-column: auto; }
+      .task { padding: 21px; }
+      .task-desc { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <span class="eyebrow">HTML · CSS · JavaScript</span>
+      <h1>Three String Exercises</h1>
+      <p class="intro">Enter a word or phrase in each task, then click its button to see the result. The programs ignore letter case and check that an input has been provided.</p>
+    </header>
+
+    <main class="tasks">
+      <section class="task" aria-labelledby="task1-title">
+        <span class="task-number">Task 01</span>
+        <h2 id="task1-title">Count the letter L</h2>
+        <p class="task-desc">Find the number of uppercase or lowercase L characters in your text.</p>
+        <form id="letter-form" novalidate>
+          <label for="letter-input">Enter a word or phrase</label>
+          <input id="letter-input" name="letter-input" type="text" placeholder="Hello World!" autocomplete="off">
+          <div class="actions">
+            <button id="letter-submit" class="primary" type="submit">Count L letters</button>
+            <button id="letter-example" class="sample" type="button">Try example</button>
+          </div>
+        </form>
+        <div class="result" role="status" aria-live="polite">
+          <span class="result-title">Result</span>
+          <output id="letter-result" for="letter-input">Your result will appear here.</output>
+        </div>
+        <p class="hint">Example: Hello World! → 3 L characters.</p>
+      </section>
+
+      <section class="task" aria-labelledby="task2-title">
+        <span class="task-number">Task 02</span>
+        <h2 id="task2-title">Count vowels</h2>
+        <p class="task-desc">Count vowels a, e, i, o, u, y, å, ä and ö, regardless of uppercase or lowercase.</p>
+        <form id="vowel-form" novalidate>
+          <label for="vowel-input">Enter a word or phrase</label>
+          <input id="vowel-input" name="vowel-input" type="text" placeholder="Hello World!" autocomplete="off">
+          <div class="actions">
+            <button id="vowel-submit" class="primary" type="submit">Count vowels</button>
+            <button id="vowel-example" class="sample" type="button">Try example</button>
+          </div>
+        </form>
+        <div class="result" role="status" aria-live="polite">
+          <span class="result-title">Result</span>
+          <output id="vowel-result" for="vowel-input">Your result will appear here.</output>
+        </div>
+        <p class="hint">Example: Hello World! → 3 vowels.</p>
+      </section>
+
+      <section class="task wide" aria-labelledby="task3-title">
+        <span class="task-number">Task 03</span>
+        <h2 id="task3-title">Palindrome checker</h2>
+        <p class="task-desc">Check whether a word or phrase reads the same forwards and backwards. Capital letters, spaces and punctuation are ignored.</p>
+        <form id="palindrome-form" novalidate>
+          <label for="palindrome-input">Enter a word or phrase</label>
+          <input id="palindrome-input" name="palindrome-input" type="text" placeholder="Madam" autocomplete="off">
+          <div class="actions">
+            <button id="palindrome-submit" class="primary" type="submit">Check palindrome</button>
+            <button id="palindrome-example" class="sample" type="button">Try Madam</button>
+            <button id="palindrome-nonexample" class="sample" type="button">Try Padam</button>
+          </div>
+        </form>
+        <div class="result" role="status" aria-live="polite">
+          <span class="result-title">Result</span>
+          <output id="palindrome-result" for="palindrome-input">Your result will appear here.</output>
+        </div>
+        <p class="hint">Examples: Madam → palindrome. Padam → NOT palindrome.</p>
+      </section>
+    </main>
+    <footer>Three independent exercises · All CSS and JavaScript are inside this HTML file.</footer>
+  </div>
+
+  <script>
+    "use strict";
+
+    // Show a message safely as text (never interpret the user's input as HTML).
+    function displayResult(outputId, message, isError = false) {
+      const output = document.getElementById(outputId);
+      output.textContent = message;
+      output.classList.toggle("error", isError);
+    }
+
+    // Return the original entered phrase, or null when blank / spaces only.
+    function readInput(inputId, outputId) {
+      const value = document.getElementById(inputId).value.trim();
+      if (value === "") {
+        displayResult(outputId, "Please enter a word or phrase first.", true);
+        return null;
+      }
+      return value;
+    }
+
+    // Task 1: Count both 'l' and 'L'.
+    function countLCharacters(text) {
+      return Array.from(text.toLowerCase()).filter(character => character === "l").length;
+    }
+
+    // Task 2: The teacher's vowel set also includes y, å, ä, and ö.
+    function countVowels(text) {
+      const vowels = "aeiouyåäö";
+      return Array.from(text.toLowerCase()).filter(character => vowels.includes(character)).length;
+    }
+
+    // Task 3: Ignore case, spaces and punctuation, including in long phrases.
+    function isPalindrome(text) {
+      const cleaned = text.toLocaleLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+      if (cleaned.length === 0) return null;
+      const characters = Array.from(cleaned);
+      return characters.join("") === characters.reverse().join("");
+    }
+
+    document.getElementById("letter-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const text = readInput("letter-input", "letter-result");
+      if (text === null) return;
+      const count = countLCharacters(text);
+      displayResult("letter-result", `${text} contains ${count}xL characters.`);
+    });
+
+    document.getElementById("vowel-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const text = readInput("vowel-input", "vowel-result");
+      if (text === null) return;
+      const count = countVowels(text);
+      displayResult("vowel-result", `${text} contains ${count} ${count === 1 ? "vowel" : "vowels"}.`);
+    });
+
+    document.getElementById("palindrome-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const text = readInput("palindrome-input", "palindrome-result");
+      if (text === null) return;
+      const result = isPalindrome(text);
+      if (result === null) {
+        displayResult("palindrome-result", "Please enter at least one letter or number.", true);
+      } else {
+        displayResult("palindrome-result", `${text} is ${result ? "palindrome" : "NOT palindrome"}.`);
+      }
+    });
+
+    function useExample(inputId, formId, example) {
+      document.getElementById(inputId).value = example;
+      document.getElementById(formId).requestSubmit();
+    }
+    document.getElementById("letter-example").addEventListener("click", () => useExample("letter-input", "letter-form", "Hello World!"));
+    document.getElementById("vowel-example").addEventListener("click", () => useExample("vowel-input", "vowel-form", "Hello World!"));
+    document.getElementById("palindrome-example").addEventListener("click", () => useExample("palindrome-input", "palindrome-form", "Madam"));
+    document.getElementById("palindrome-nonexample").addEventListener("click", () => useExample("palindrome-input", "palindrome-form", "Padam"));
+  </script>
+</body>
+</html>
